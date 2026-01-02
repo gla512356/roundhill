@@ -29,7 +29,7 @@ render_html("""
     <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-    /* 1. 글로벌 스타일 및 다크모드 강제 해제 */
+    /* 1. 글로벌 스타일 */
     html, body, [class*="css"] {
         font-family: 'Pretendard', sans-serif;
         background-color: #f0fdfa !important; /* 아주 연한 민트 배경 */
@@ -66,7 +66,7 @@ render_html("""
     }
     .header-content { position: relative; z-index: 1; }
 
-    /* 3. 뱃지 스타일 (우선순위 강화) */
+    /* 3. 뱃지 스타일 (마켓 상태별 컬러) */
     .market-badge {
         display: inline-flex; align-items: center; gap: 6px;
         padding: 6px 12px; border-radius: 20px;
@@ -75,9 +75,11 @@ render_html("""
         box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
+    /* 상태별 색상 강제 적용 (!important) */
     .header-card .status-open { background: #00e676 !important; color: #003300 !important; animation: pulse 2s infinite; }
     .header-card .status-pre { background: #ffea00 !important; color: #3e2723 !important; }
     .header-card .status-after { background: #d1c4e9 !important; color: #4527a0 !important; }
+    .header-card .status-day { background: #00b0ff !important; color: #00251a !important; } /* 데이마켓 (파랑) */
     .header-card .status-closed { background: #eceff1 !important; color: #455a64 !important; border: 1px solid #cfd8dc; }
 
     @keyframes pulse {
@@ -95,7 +97,7 @@ render_html("""
         color: white !important;
     }
 
-    /* 4. 타임라인 (유리 질감) */
+    /* 4. 타임라인 */
     .timeline-container { display: flex; gap: 8px; margin-top: 24px; }
     .glass-box {
         flex: 1; text-align: center;
@@ -125,7 +127,7 @@ render_html("""
     .m-title { font-size: 0.7rem; color: #0f766e !important; font-weight: 600; margin-bottom: 4px; white-space: nowrap; }
     .m-data { font-size: 0.95rem; font-weight: 800; color: #115e59 !important; }
 
-    /* 6. 계산기 카드 공통 */
+    /* 6. 계산기 카드 */
     .calc-card-bg { background: white !important; border-radius: 24px; padding: 20px; border: 1px solid #e0e0e0; margin-top: 10px; }
     .calc-row { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
     .calc-label { font-size: 0.9rem; color: #666 !important; }
@@ -148,7 +150,7 @@ render_html("""
     .badge-safe { background: #e8fdf3 !important; color: #02cba5 !important; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
     .ticker-tag { background: #ccfbf1 !important; color: #0f766e !important; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; }
 
-    /* Streamlit 위젯 커스텀 */
+    /* 버튼 스타일 */
     div.stButton > button {
         width: 100%; border-radius: 12px; font-weight: 700;
         background: #fff !important; 
@@ -165,7 +167,7 @@ render_html("""
         color: #000 !important;
     }
 
-    /* 탭 메뉴 스타일 */
+    /* 탭 스타일 */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px; overflow-x: auto; white-space: nowrap; 
         padding-bottom: 4px; -webkit-overflow-scrolling: touch;
@@ -182,18 +184,14 @@ render_html("""
         border-color: #0d9488 !important;
     }
 
-    /* [MOBILE] 모바일 반응형 처리 */
+    /* 모바일 반응형 */
     @media (max-width: 480px) {
         .header-card { padding: 24px 16px; margin-bottom: 16px; }
         .header-card h2 { font-size: 1.3rem !important; }
         .timeline-container { gap: 6px; margin-top: 20px; }
         .t-val { font-size: 0.8rem; }
-
         .info-card { padding: 20px 16px; }
-        .m-data { font-size: 0.85rem !important; }
-
         .calc-card-bg { padding: 16px; }
-        .calc-total-val { font-size: 1.2rem !important; }
     }
     </style>
 """)
@@ -204,7 +202,7 @@ render_html("""
 # 배당락: 1/5(월)
 # 지급일: 1/6(화)
 SCHEDULE_KST = {
-    "buy_limit": "1/5(월) 06:00", # 한국시간 기준 월요일 새벽 장마감 전
+    "buy_limit": "1/5(월) 06:00", 
     "ex_date": "1/5(월)",
     "pay_date": "1/6(화)" 
 }
@@ -237,34 +235,46 @@ DATA_MAP = {
 }
 
 # -----------------------------
-# [함수] 마켓 상태 체크 (실시간)
+# [함수] 마켓 상태 체크 (데이마켓 포함)
 # -----------------------------
 def get_us_market_status():
     ny_tz = pytz.timezone('America/New_York')
     now_ny = datetime.now(ny_tz)
 
-    # 1. 주말 체크
-    if now_ny.weekday() >= 5: 
+    # 분 단위 환산 (0 ~ 1440분)
+    minutes = now_ny.hour * 60 + now_ny.minute
+
+    # 1. 주말 체크 (토요일은 종일 휴장, 일요일은 저녁 8시부터 데이마켓 오픈 가능)
+    # weekday(): 5=토, 6=일
+    if now_ny.weekday() == 5: 
+        return "⛔ 휴장 (주말)", "status-closed"
+    elif now_ny.weekday() == 6 and minutes < 1200: # 일요일인데 20시 전이면 휴장
         return "⛔ 휴장 (주말)", "status-closed"
 
-    # 2. 공휴일 체크 (2025/2026 주요 휴장일)
+    # 2. 공휴일 체크 (밤 8시 이후면 다음날 데이마켓으로 간주하여 통과)
     holidays = [
         "2025-12-25", "2026-01-01", "2026-01-19", "2026-02-16"
     ]
     if now_ny.strftime("%Y-%m-%d") in holidays:
-        return "⛔ 휴장 (공휴일)", "status-closed"
+        # 공휴일이지만 20시(1200분) 넘었으면 데이마켓 오픈으로 간주
+        if minutes < 1200: 
+            return "⛔ 휴장 (공휴일)", "status-closed"
 
-    # 3. 시간대 체크 (분 단위 환산)
-    minutes = now_ny.hour * 60 + now_ny.minute
+    # 3. 시간대 체크
+    # Pre-market: 04:00 ~ 09:30 (240 ~ 570)
+    # Regular: 09:30 ~ 16:00 (570 ~ 960)
+    # After-market: 16:00 ~ 20:00 (960 ~ 1200)
+    # Day Market (주간거래): 20:00 ~ 04:00 (1200 ~ 1440 or 0 ~ 240) -> 한국시간 낮
 
     if 240 <= minutes < 570:   # 04:00 ~ 09:30
-        return "🌅 프리마켓", "status-pre"
+        return "🌅 프리마켓 (Pre-Market)", "status-pre"
     elif 570 <= minutes < 960: # 09:30 ~ 16:00
-        return "🔥 정규장 오픈", "status-open"
+        return "🔥 정규장 (Open)", "status-open"
     elif 960 <= minutes < 1200: # 16:00 ~ 20:00
-        return "🌙 애프터마켓", "status-after"
+        return "🌙 애프터마켓 (After)", "status-after"
     else:
-        return "💤 장 마감", "status-closed"
+        # 20:00 ~ 04:00 (한국 낮 시간) -> 데이마켓
+        return "☀️ 데이마켓 (Day Market)", "status-day"
 
 # -----------------------------
 # [함수] 데이터 연결 (15초 갱신)
