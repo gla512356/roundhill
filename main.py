@@ -9,43 +9,55 @@ import math
 # [설정] 앱 기본 설정
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="WeeklyPay™ ETFs - Dividend",
-    page_icon="💎",
+    page_title="Roundhill WeeklyPay™ - 1월 2주차",
+    page_icon="🌿",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
 # ---------------------------------------------------------
-# [핵심] HTML 공백 제거 함수 (렌더링 오류 방지)
+# [핵심] HTML 공백 제거 함수
 # ---------------------------------------------------------
 def render_html(raw_html):
     cleaned = " ".join([line.strip() for line in raw_html.splitlines() if line.strip()])
     st.markdown(cleaned, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# [스타일] CSS (모바일 최적화 & 초고퀄리티 UI)
+# [스타일] CSS (Roundhill Theme: Deep Teal & Mint)
 # ---------------------------------------------------------
 render_html("""
     <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-    /* 1. 글로벌 스타일 */
+    /* 1. 글로벌 스타일 및 다크모드 강제 해제 */
     html, body, [class*="css"] {
         font-family: 'Pretendard', sans-serif;
-        background-color: #f2f4f6;
-        color: #191f28;
+        background-color: #f0fdfa !important; /* 아주 연한 민트 배경 */
+        color: #191f28 !important;
     }
 
-    /* 2. 헤더 카드 (Midnight Purple Gradient) */
+    /* Streamlit 기본 패딩 조정 */
+    .block-container {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* 2. 헤더 카드 (Deep Teal Gradient) */
     .header-card {
-        background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
         padding: 32px 24px;
         border-radius: 24px;
-        color: white;
+        color: white !important;
         margin-bottom: 24px;
-        box-shadow: 0 10px 25px rgba(24, 40, 72, 0.3);
+        box-shadow: 0 10px 25px rgba(15, 118, 110, 0.3);
         position: relative;
         overflow: hidden;
+    }
+    /* 헤더 텍스트 강제 화이트 */
+    .header-card h2, .header-card div:not(.market-badge), .header-card span:not(.market-badge) {
+        color: white !important;
     }
     .header-card::before {
         content: ''; position: absolute; top: -60px; right: -60px;
@@ -54,7 +66,7 @@ render_html("""
     }
     .header-content { position: relative; z-index: 1; }
 
-    /* 3. 뱃지 스타일 */
+    /* 3. 뱃지 스타일 (우선순위 강화) */
     .market-badge {
         display: inline-flex; align-items: center; gap: 6px;
         padding: 6px 12px; border-radius: 20px;
@@ -62,10 +74,11 @@ render_html("""
         margin-bottom: 12px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
-    .status-open { background: #00e676; color: #003300; animation: pulse 2s infinite; }
-    .status-pre { background: #ffea00; color: #3e2723; }
-    .status-after { background: #d1c4e9; color: #4527a0; }
-    .status-closed { background: #eceff1; color: #455a64; border: 1px solid #cfd8dc; }
+
+    .header-card .status-open { background: #00e676 !important; color: #003300 !important; animation: pulse 2s infinite; }
+    .header-card .status-pre { background: #ffea00 !important; color: #3e2723 !important; }
+    .header-card .status-after { background: #d1c4e9 !important; color: #4527a0 !important; }
+    .header-card .status-closed { background: #eceff1 !important; color: #455a64 !important; border: 1px solid #cfd8dc; }
 
     @keyframes pulse {
         0% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
@@ -79,6 +92,7 @@ render_html("""
         font-size: 0.8rem; font-weight: 600;
         backdrop-filter: blur(5px);
         border: 1px solid rgba(255,255,255,0.2);
+        color: white !important;
     }
 
     /* 4. 타임라인 (유리 질감) */
@@ -90,56 +104,66 @@ render_html("""
         border: 1px solid rgba(255,255,255,0.15);
         backdrop-filter: blur(4px);
     }
-    .t-label { font-size: 0.7rem; color: rgba(255,255,255,0.8); margin-bottom: 4px; }
-    .t-val { font-size: 0.9rem; font-weight: 700; color: #fff; white-space: nowrap; }
-    .accent-gold { color: #ffd700; }
-    .accent-green { color: #69f0ae; }
+    .t-label { font-size: 0.7rem; color: rgba(255,255,255,0.8) !important; margin-bottom: 4px; }
+    .t-val { font-size: 0.9rem; font-weight: 700; color: #fff !important; white-space: nowrap; }
+    .accent-gold { color: #ffd700 !important; }
+    .accent-green { color: #69f0ae !important; }
 
-    /* 5. 메인 정보 카드 (그림자 & 라운드) */
+    /* 5. 메인 정보 카드 */
     .info-card {
-        background: white; border-radius: 24px; padding: 24px;
+        background: white !important; border-radius: 24px; padding: 24px;
         box-shadow: 0 8px 24px rgba(0,0,0,0.03);
-        border: 1px solid #ffffff; margin-bottom: 20px;
+        border: 1px solid #ccfbf1; margin-bottom: 20px;
     }
     .metric-grid { display: flex; gap: 8px; margin-top: 20px; }
     .metric-box {
-        flex: 1; background: #f9f9fb; border-radius: 14px;
+        flex: 1; background: #f0fdfa !important; border-radius: 14px;
         padding: 12px 6px; text-align: center;
-        border: 1px solid #f0f0f5;
+        border: 1px solid #99f6e4;
+        min-width: 0;
     }
-    .m-title { font-size: 0.7rem; color: #8b95a1; font-weight: 600; margin-bottom: 4px; white-space: nowrap; }
-    .m-data { font-size: 0.95rem; font-weight: 800; color: #333; }
+    .m-title { font-size: 0.7rem; color: #0f766e !important; font-weight: 600; margin-bottom: 4px; white-space: nowrap; }
+    .m-data { font-size: 0.95rem; font-weight: 800; color: #115e59 !important; }
 
-    /* 6. 계산기 카드 공통 스타일 */
-    .calc-card-bg { background: white; border-radius: 24px; padding: 20px; border: 1px solid #e0e0e0; margin-top: 10px; }
+    /* 6. 계산기 카드 공통 */
+    .calc-card-bg { background: white !important; border-radius: 24px; padding: 20px; border: 1px solid #e0e0e0; margin-top: 10px; }
     .calc-row { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
-    .calc-label { font-size: 0.9rem; color: #666; }
-    .calc-val { font-weight: 700; color: #333; }
+    .calc-label { font-size: 0.9rem; color: #666 !important; }
+    .calc-val { font-weight: 700; color: #333 !important; }
     .calc-divider { border-top: 1px dashed #ddd; margin: 12px 0; }
-    .calc-total-label { font-size: 1rem; font-weight: 700; color: #3182f6; }
-    .calc-total-val { font-size: 1.4rem; font-weight: 800; color: #3182f6; }
+    .calc-total-label { font-size: 1rem; font-weight: 700; color: #0d9488 !important; }
+    .calc-total-val { font-size: 1.4rem; font-weight: 800; color: #0f766e !important; }
 
     /* 주의사항 박스 */
     .caution-box {
         margin-top: 16px; padding: 14px;
-        background: #fafafa; border-radius: 12px;
+        background: #fafafa !important; border-radius: 12px;
         border: 1px solid #eee;
-        font-size: 0.8rem; color: #767676; line-height: 1.5;
+        font-size: 0.8rem; color: #767676 !important; line-height: 1.5;
     }
-    .caution-header { font-weight: 700; color: #555; margin-bottom: 4px; display: block; }
+    .caution-header { font-weight: 700; color: #555 !important; margin-bottom: 4px; display: block; }
 
     /* 뱃지류 */
-    .badge-roc { background: #fff0f2; color: #f04452; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
-    .badge-safe { background: #e8fdf3; color: #02cba5; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
-    .ticker-tag { background: #e8f3ff; color: #3182f6; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; }
+    .badge-roc { background: #fff0f2 !important; color: #f04452 !important; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+    .badge-safe { background: #e8fdf3 !important; color: #02cba5 !important; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+    .ticker-tag { background: #ccfbf1 !important; color: #0f766e !important; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; }
 
     /* Streamlit 위젯 커스텀 */
     div.stButton > button {
         width: 100%; border-radius: 12px; font-weight: 700;
-        background: #fff; border: 1px solid #e5e8eb; color: #6b7684;
+        background: #fff !important; 
+        border: 1px solid #e5e8eb !important;
+        color: #6b7684 !important;
         height: 48px; transition: all 0.2s;
     }
-    div.stButton > button:hover { background: #f2f4f6; color: #333; border-color: #ccc; }
+    div.stButton > button:hover { 
+        background: #f0fdfa !important; 
+        color: #0f766e !important; 
+        border-color: #99f6e4 !important; 
+    }
+    div.stButton > button:active {
+        color: #000 !important;
+    }
 
     /* 탭 메뉴 스타일 */
     .stTabs [data-baseweb="tab-list"] {
@@ -147,53 +171,69 @@ render_html("""
         padding-bottom: 4px; -webkit-overflow-scrolling: touch;
     }
     .stTabs [data-baseweb="tab"] {
-        height: 42px; background-color: #fff; 
+        height: 42px; background-color: #fff !important; 
         border-radius: 20px; border: 1px solid #e5e8eb;
         padding: 0 16px; font-size: 0.85rem; font-weight: 600;
+        color: #666 !important;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #3182f6; color: white; border-color: #3182f6;
+        background-color: #0d9488 !important; 
+        color: white !important; 
+        border-color: #0d9488 !important;
+    }
+
+    /* [MOBILE] 모바일 반응형 처리 */
+    @media (max-width: 480px) {
+        .header-card { padding: 24px 16px; margin-bottom: 16px; }
+        .header-card h2 { font-size: 1.3rem !important; }
+        .timeline-container { gap: 6px; margin-top: 20px; }
+        .t-val { font-size: 0.8rem; }
+
+        .info-card { padding: 20px 16px; }
+        .m-data { font-size: 0.85rem !important; }
+
+        .calc-card-bg { padding: 16px; }
+        .calc-total-val { font-size: 1.2rem !important; }
     }
     </style>
 """)
 
 # ---------------------------------------------------------
-# [데이터] WeeklyPay™ ETFs (2025-12-29 기준)
+# [데이터] Roundhill WeeklyPay (2025-01-05 기준)
 # ---------------------------------------------------------
-# 배당락: 12/29(월) / 지급일: 12/30(화)
-# 매수마감: 12/26(금) 미국장 마감 -> 한국시간 12/27(토) 06:00
+# 배당락: 1/5(월)
+# 지급일: 1/6(화)
 SCHEDULE_KST = {
-    "buy_limit": "12/27(토) 06:00", 
-    "ex_date": "12/29(월)",
-    "pay_date": "12/30(화)" 
+    "buy_limit": "1/5(월) 06:00", # 한국시간 기준 월요일 새벽 장마감 전
+    "ex_date": "1/5(월)",
+    "pay_date": "1/6(화)" 
 }
 
-# WeeklyPay Shares 데이터 매핑
-# ROC는 모두 100%로 명시됨.
+# Roundhill 데이터 매핑 (23개 종목)
 DATA_MAP = {
-    'AAPW': {'div': 0.191593, 'rate': 24.38, 'sec': 1.81, 'roc': 100.00, 'name': 'AAPL WeeklyPay™'},
-    'AMDW': {'div': 0.648970, 'rate': 65.65, 'sec': 1.89, 'roc': 100.00, 'name': 'AMD WeeklyPay™'},
-    'AMZW': {'div': 0.339680, 'rate': 40.95, 'sec': 2.08, 'roc': 100.00, 'name': 'AMZN WeeklyPay™'},
-    'ARMW': {'div': 0.166464, 'rate': 31.52, 'sec': 2.54, 'roc': 100.00, 'name': 'ARM WeeklyPay™'},
-    'AVGW': {'div': 0.388011, 'rate': 41.11, 'sec': 1.87, 'roc': 100.00, 'name': 'AVGO WeeklyPay™'},
-    'BABW': {'div': 0.287028, 'rate': 36.27, 'sec': 2.51, 'roc': 100.00, 'name': 'BABA WeeklyPay™'},
-    'BRKW': {'div': 0.144602, 'rate': 16.94, 'sec': 2.10, 'roc': 100.00, 'name': 'BRKB WeeklyPay™'},
-    'COIW': {'div': 0.212328, 'rate': 51.96, 'sec': 3.76, 'roc': 100.00, 'name': 'COIN WeeklyPay™'},
-    'COSW': {'div': 0.138350, 'rate': 16.61, 'sec': 2.29, 'roc': 100.00, 'name': 'COST WeeklyPay™'},
-    'GOOW': {'div': 0.525323, 'rate': 38.18, 'sec': 1.45, 'roc': 100.00, 'name': 'GOOGL WeeklyPay™'},
-    'HOOW': {'div': 0.829213, 'rate': 84.55, 'sec': 2.67, 'roc': 100.00, 'name': 'HOOD WeeklyPay™'},
-    'METW': {'div': 0.315116, 'rate': 45.15, 'sec': 2.84, 'roc': 100.00, 'name': 'META WeeklyPay™'},
-    'MSFW': {'div': 0.277804, 'rate': 36.06, 'sec': 2.56, 'roc': 100.00, 'name': 'MSFT WeeklyPay™'},
-    'MSTW': {'div': 0.162949, 'rate': 80.62, 'sec': -0.51, 'roc': 100.00, 'name': 'MSTR WeeklyPay™'},
-    'NFLW': {'div': 0.230681, 'rate': 42.98, 'sec': 2.57, 'roc': 100.00, 'name': 'NFLX WeeklyPay™'},
-    'NVDW': {'div': 0.444250, 'rate': 53.30, 'sec': 2.11, 'roc': 100.00, 'name': 'NVDA WeeklyPay™'},
-    'PLTW': {'div': 0.625596, 'rate': 79.69, 'sec': 2.09, 'roc': 100.00, 'name': 'PLTR WeeklyPay™'},
-    'TSLW': {'div': 0.503720, 'rate': 72.38, 'sec': 1.73, 'roc': 100.00, 'name': 'TSLA WeeklyPay™'},
-    'UBEW': {'div': 0.198237, 'rate': 26.06, 'sec': 2.21, 'roc': 100.00, 'name': 'UBER WeeklyPay™'},
-    'UNHW': {'div': 0.326242, 'rate': 33.55, 'sec': 0.00, 'roc': 100.00, 'name': 'UNH WeeklyPay™'},
-    'TSYW': {'div': 0.133075, 'rate': 14.41, 'sec': 0.00, 'roc': 100.00, 'name': 'Treasury Bond WeeklyPay™'},
-    'GLDW': {'div': 0.281966, 'rate': 25.82, 'sec': 0.00, 'roc': 100.00, 'name': 'Gold WeeklyPay™'},
-    'GDXW': {'div': 0.662749, 'rate': 54.60, 'sec': 0.00, 'roc': 100.00, 'name': 'Gold Miners WeeklyPay™'},
+    'MSTW': {'div': 0.1608, 'rate': 85.39, 'sec': -0.51, 'roc': 100.00, 'name': 'MSTR WeeklyPay'},
+    'HOOW': {'div': 0.6534, 'rate': 71.39, 'sec': 2.67, 'roc': 100.00, 'name': 'HOOD WeeklyPay'},
+    'GDXW': {'div': 0.7216, 'rate': 64.81, 'sec': 1.89, 'roc': 100.00, 'name': 'Gold Miners Weekly'},
+    'AMDW': {'div': 0.6279, 'rate': 64.66, 'sec': 1.89, 'roc': 100.00, 'name': 'AMD WeeklyPay'},
+    'PLTW': {'div': 0.4573, 'rate': 63.62, 'sec': 2.09, 'roc': 100.00, 'name': 'PLTR WeeklyPay'},
+    'COIW': {'div': 0.2399, 'rate': 62.76, 'sec': 3.76, 'roc': 100.00, 'name': 'COIN WeeklyPay'},
+    'TSLW': {'div': 0.3940, 'rate': 61.39, 'sec': 1.73, 'roc': 100.00, 'name': 'TSLA WeeklyPay'},
+    'NVDW': {'div': 0.4695, 'rate': 58.42, 'sec': 2.11, 'roc': 100.00, 'name': 'NVDA WeeklyPay'},
+    'AVGW': {'div': 0.5967, 'rate': 65.09, 'sec': 1.87, 'roc': 100.00, 'name': 'AVGO WeeklyPay'},
+    'ARMW': {'div': 0.2809, 'rate': 54.09, 'sec': 2.54, 'roc': 100.00, 'name': 'ARM WeeklyPay'},
+    'BABW': {'div': 0.4040, 'rate': 53.84, 'sec': 2.51, 'roc': 100.00, 'name': 'BABA WeeklyPay'},
+    'UBEW': {'div': 0.3640, 'rate': 47.79, 'sec': 2.21, 'roc': 100.00, 'name': 'UBER WeeklyPay'},
+    'UNHW': {'div': 0.4518, 'rate': 47.06, 'sec': 0.00, 'roc': 100.00, 'name': 'UNH WeeklyPay'},
+    'NFLW': {'div': 0.2403, 'rate': 45.56, 'sec': 2.57, 'roc': 100.00, 'name': 'NFLX WeeklyPay'},
+    'GOOW': {'div': 0.6166, 'rate': 45.25, 'sec': 1.45, 'roc': 100.00, 'name': 'GOOGL WeeklyPay'},
+    'AMZW': {'div': 0.3545, 'rate': 43.47, 'sec': 2.08, 'roc': 100.00, 'name': 'AMZN WeeklyPay'},
+    'METW': {'div': 0.2920, 'rate': 42.45, 'sec': 2.84, 'roc': 100.00, 'name': 'META WeeklyPay'},
+    'GLDW': {'div': 0.3456, 'rate': 33.81, 'sec': 0.00, 'roc': 100.00, 'name': 'Gold WeeklyPay'},
+    'MSFW': {'div': 0.2394, 'rate': 31.62, 'sec': 2.56, 'roc': 100.00, 'name': 'MSFT WeeklyPay'},
+    'COSW': {'div': 0.2460, 'rate': 30.08, 'sec': 2.29, 'roc': 100.00, 'name': 'COST WeeklyPay'},
+    'AAPW': {'div': 0.2112, 'rate': 27.19, 'sec': 1.81, 'roc': 100.00, 'name': 'AAPL WeeklyPay'},
+    'BRKW': {'div': 0.1814, 'rate': 21.11, 'sec': 2.10, 'roc': 100.00, 'name': 'BRKB WeeklyPay'},
+    'TSYW': {'div': 0.1227, 'rate': 13.44, 'sec': 0.00, 'roc': 100.00, 'name': 'Treasury Weekly'},
 }
 
 # -----------------------------
@@ -234,7 +274,7 @@ def get_market_info(ticker_keys):
     try:
         fx = yf.Ticker("USDKRW=X").history(period="1d")["Close"].iloc[-1]
     except:
-        fx = 1435.0 # Fallback
+        fx = 1440.0 # Fallback
 
     prices = {}
     try:
@@ -266,14 +306,14 @@ with st.spinner("미국 현지 데이터 수신 중..."):
 
 tax_rate = 0.154
 
-# 1. 헤더 영역
+# 1. 헤더 영역 (Roundhill Theme)
 render_html(f"""
     <div class="header-card">
         <div class="header-content" style="display:flex; justify-content:space-between; align-items:start;">
             <div>
                 <div class="market-badge {market_class}">{market_text}</div>
                 <h2 style="margin:0; font-size:1.5rem; font-weight:800; letter-spacing:-0.5px;">
-                    WeeklyPay™ ETFs<br>최신 배당 내역
+                    Roundhill WeeklyPay™<br>1월 2주차 배당
                 </h2>
             </div>
             <div style="text-align:right;">
@@ -303,8 +343,8 @@ st.markdown("### 💎 종목별 상세 분석")
 
 col_sel, _ = st.columns([1, 0.01])
 with col_sel:
-    # 기본값 NVDW로 설정
-    def_idx = t_list.index("NVDW") if "NVDW" in t_list else 0
+    # 기본값 MSTW (1위 종목)
+    def_idx = t_list.index("MSTW") if "MSTW" in t_list else 0
     sel_ticker = st.selectbox("분석할 ETF 선택", t_list, index=def_idx)
 
 # 데이터 계산
@@ -316,9 +356,9 @@ div_krw_net = div_krw * (1 - tax_rate)
 # 성향 뱃지 (ROC 100%이므로 절세/안정형 강조)
 risk_badge = "<span class='badge-safe'>🛡️ 절세/원금반환형 (ROC 100%)</span>"
 
-# Rate나 SEC가 0.0(TBA)인 경우 처리
-rate_disp = f"{d['rate']}%" if d['rate'] > 0 else "TBA"
-sec_disp = f"{d['sec']}%" if d['sec'] != 0 else "TBA"
+# Rate나 SEC가 0.0인 경우 처리
+rate_disp = f"{d['rate']}%" if d['rate'] > 0 else "-"
+sec_disp = f"{d['sec']}%" if d['sec'] != 0 else "-"
 
 render_html(f"""
     <div class="info-card">
@@ -331,21 +371,21 @@ render_html(f"""
         </div>
 
         <div style="text-align:center; padding: 10px 0;">
-            <div style="font-size:0.85rem; color:#8b95a1; margin-bottom:6px;">1주당 확정 배당금</div>
-            <div style="font-size:2.4rem; font-weight:900; color:#191f28; letter-spacing:-1px; line-height:1;">
+            <div style="font-size:0.85rem; color:#0f766e; margin-bottom:6px;">1주당 확정 배당금</div>
+            <div style="font-size:2.4rem; font-weight:900; color:#0d9488; letter-spacing:-1px; line-height:1;">
                 ${d['div']:.4f}
             </div>
             <div style="font-size:1.1rem; font-weight:700; margin-top:8px;">
                 <span style="color:#adb5bd;">(세전)</span> {div_krw:,.0f}원 
                 <span style="margin:0 6px; color:#ddd;">|</span> 
-                <span style="color:#3182f6;">{div_krw_net:,.0f}원 <span style="font-size:0.8rem; font-weight:500;">(세후)</span></span>
+                <span style="color:#0f766e;">{div_krw_net:,.0f}원 <span style="font-size:0.8rem; font-weight:500;">(세후)</span></span>
             </div>
         </div>
 
         <div class="metric-grid">
             <div class="metric-box">
                 <div class="m-title">📊 분배율(Rate)</div>
-                <div class="m-data" style="color:#3182f6;">{rate_disp}</div>
+                <div class="m-data">{rate_disp}</div>
             </div>
             <div class="metric-box">
                 <div class="m-title">🏦 실질수익(SEC)</div>
@@ -353,7 +393,7 @@ render_html(f"""
             </div>
             <div class="metric-box">
                 <div class="m-title">↩️ 원금반환(ROC)</div>
-                <div class="m-data" style="color: #00bfa5;">{d['roc']}%</div>
+                <div class="m-data" style="color: #ef4444 !important;">{d['roc']}%</div>
             </div>
         </div>
 
@@ -427,11 +467,11 @@ with tabs[1]:
         <div class="calc-card-bg">
             <div style="font-size:0.9rem; color:#666; margin-bottom:8px;">평단가 변화</div>
             <div style="font-size:1.3rem; font-weight:700; display:flex; align-items:center; gap:8px;">
-                ${my_avg:.2f} <span style="color:#ccc;">➔</span> <span style="color:#3182f6;">${new_avg:.2f}</span>
+                ${my_avg:.2f} <span style="color:#ccc;">➔</span> <span style="color:#0f766e;">${new_avg:.2f}</span>
             </div>
-            <div style="background:#f0f8ff; border-radius:12px; padding:12px; margin-top:16px;">
-                <div style="font-size:0.85rem; color:#3182f6; font-weight:600;">🚀 탈출 기간 단축</div>
-                <div style="font-size:1rem; font-weight:700; color:#1a2980; margin-top:4px;">
+            <div style="background:#f0fdfa; border-radius:12px; padding:12px; margin-top:16px;">
+                <div style="font-size:0.85rem; color:#0f766e; font-weight:600;">🚀 탈출 기간 단축</div>
+                <div style="font-size:1rem; font-weight:700; color:#0f766e; margin-top:4px;">
                     {old_w:.1f}주 ➔ {new_w:.1f}주 <span style="color:#00c853;">(-{saved:.1f}주 단축)</span>
                 </div>
             </div>
@@ -450,9 +490,9 @@ with tabs[2]:
 
     render_html(f"""
         <div class="calc-card-bg">
-            <div class="calc-row" style="background:#f8f9fa; padding:8px; border-radius:8px;">
+            <div class="calc-row" style="background:#f0fdfa; padding:8px; border-radius:8px;">
                 <span class="calc-label">⚡ 현재 유지</span>
-                <span class="calc-val" style="color:#3182f6;">{base_pay:,.0f}원</span>
+                <span class="calc-val" style="color:#0f766e;">{base_pay:,.0f}원</span>
             </div>
             <div class="calc-row">
                 <span class="calc-label">📉 -10% 삭감</span>
@@ -512,7 +552,7 @@ with tabs[4]:
     render_html(f"""
         <div class="calc-card-bg">
             <div style="text-align:center; margin-bottom:16px;">
-                <div style="font-size:0.9rem; color:#666;">매주 <b style="color:#3182f6;">{target}만원</b> 받으려면?</div>
+                <div style="font-size:0.9rem; color:#666;">매주 <b style="color:#0f766e;">{target}만원</b> 받으려면?</div>
             </div>
             <div style="display:flex; justify-content:space-around; align-items:center;">
                 <div style="text-align:center;">
@@ -522,7 +562,7 @@ with tabs[4]:
                 <div style="width:1px; height:30px; background:#eee;"></div>
                 <div style="text-align:center;">
                     <div style="font-size:0.8rem; color:#888;">예상 투자금</div>
-                    <div style="font-size:1.2rem; font-weight:800; color:#3182f6;">{req_money/10000:,.0f}만원</div>
+                    <div style="font-size:1.2rem; font-weight:800; color:#0f766e;">{req_money/10000:,.0f}만원</div>
                 </div>
             </div>
         </div>
@@ -549,15 +589,15 @@ with tabs[5]:
         add_cnt, rem_cash, next_inc = 0, 0, 0
 
     render_html(f"""
-        <div class="calc-card-bg" style="background:linear-gradient(135deg, #e3f2fd 0%, #fff 100%);">
+        <div class="calc-card-bg" style="background:linear-gradient(135deg, #f0fdfa 0%, #fff 100%);">
             <div style="text-align:center; margin-bottom:10px;">
                 <span style="font-size:0.9rem; color:#555;">이번 배당금으로</span><br>
-                <span style="font-size:1.5rem; font-weight:900; color:#1565c0;">+{add_cnt}주</span>
+                <span style="font-size:1.5rem; font-weight:900; color:#0f766e;">+{add_cnt}주</span>
                 <span style="font-size:1rem; font-weight:700;"> 추가 매수!</span>
             </div>
-            <div style="background:white; border-radius:12px; padding:12px; text-align:center; border:1px solid #bbdefb;">
+            <div style="background:white; border-radius:12px; padding:12px; text-align:center; border:1px solid #ccfbf1;">
                 <div style="font-size:0.8rem; color:#888;">다음 주 늘어나는 배당금</div>
-                <div style="font-size:1.1rem; font-weight:800; color:#1565c0;">+{next_inc:,.0f}원 🆙</div>
+                <div style="font-size:1.1rem; font-weight:800; color:#0f766e;">+{next_inc:,.0f}원 🆙</div>
             </div>
             <div style="text-align:center; font-size:0.75rem; color:#999; margin-top:8px;">
                 (남는 돈 {rem_cash:,.0f}원은 간식비 ☕)
@@ -581,6 +621,6 @@ with st.expander("🎓 주린이 용어 가이드"):
         최근 30일간 펀드가 실제로 벌어들인 이자 수익(펀더멘털)입니다.</p>
         <p><b>3️⃣ ROC (Return of Capital)</b><br>
         <span style="color:#e92c2c;">⚠️ 중요!</span> 펀드가 번 돈이 아니라, <b>투자 원금을 깎아서</b> 배당으로 준 비율입니다.
-        이번 배당은 <b>전액 ROC(100%)</b>로, 당장 세금은 없지만 평단가가 낮아집니다.</p>
+        이번 Roundhill 배당은 <b>전액 ROC(100%)</b>로, 당장 세금은 없지만 평단가가 낮아집니다.</p>
     </div>
     """)
