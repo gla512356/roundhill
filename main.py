@@ -23,217 +23,859 @@ def render_html(raw_html):
     st.markdown(cleaned, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# [스타일] CSS (Roundhill Theme: Deep Teal & Mint)
+# [스타일] CSS (ULTIMATE Enhanced Design)
 # ---------------------------------------------------------
 render_html("""
     <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-    /* 1. 글로벌 스타일 */
+    /* ========================================
+       1. 글로벌 스타일 - 배경에 미세한 패턴 추가
+    ======================================== */
     html, body, [class*="css"] {
-        font-family: 'Pretendard', sans-serif;
-        background-color: #f0fdfa !important; /* 아주 연한 민트 배경 */
-        color: #191f28 !important;
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(20, 184, 166, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%),
+            linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%) !important;
+        color: #0f172a !important;
     }
 
-    /* Streamlit 기본 패딩 조정 */
     .block-container {
-        padding-top: 2rem !important;
+        padding-top: 1.5rem !important;
         padding-bottom: 3rem !important;
         padding-left: 1rem !important;
         padding-right: 1rem !important;
+        max-width: 680px !important;
     }
 
-    /* 2. 헤더 카드 (Deep Teal Gradient) */
+    /* ========================================
+       2. 헤더 카드 - 더 화려한 그라데이션 + 파티클 효과
+    ======================================== */
     .header-card {
-        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
-        padding: 28px 20px;
-        border-radius: 24px;
+        background: 
+            radial-gradient(circle at 100% 0%, rgba(6, 182, 212, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 0% 100%, rgba(20, 184, 166, 0.2) 0%, transparent 50%),
+            linear-gradient(135deg, #0f766e 0%, #14b8a6 35%, #06b6d4 70%, #0ea5e9 100%);
+        padding: 32px 24px;
+        border-radius: 32px;
         color: white !important;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 25px rgba(15, 118, 110, 0.3);
+        margin-bottom: 24px;
+        box-shadow: 
+            0 25px 50px rgba(15, 118, 110, 0.3),
+            0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+            0 10px 30px rgba(6, 182, 212, 0.2);
         position: relative;
         overflow: hidden;
+        backdrop-filter: blur(10px);
     }
+
+    /* 파티클 효과 */
+    .header-card::before {
+        content: '';
+        position: absolute;
+        top: -120px;
+        right: -120px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 40%, transparent 70%);
+        border-radius: 50%;
+        z-index: 0;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .header-card::after {
+        content: '';
+        position: absolute;
+        bottom: -100px;
+        left: -100px;
+        width: 250px;
+        height: 250px;
+        background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, rgba(6, 182, 212, 0.08) 40%, transparent 70%);
+        border-radius: 50%;
+        z-index: 0;
+        animation: float 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(20px, 20px) scale(1.1); }
+    }
+
     .header-card h2, .header-card div, .header-card span {
         color: white !important;
-    }
-    .header-card::before {
-        content: ''; position: absolute; top: -60px; right: -60px;
-        width: 180px; height: 180px;
-        background: rgba(255,255,255,0.1); border-radius: 50%; z-index: 0;
+        position: relative;
+        z-index: 1;
     }
 
-    /* 3. 뱃지 스타일 */
+    .header-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ========================================
+       3. 뱃지 스타일 - 더 강렬한 그라데이션
+    ======================================== */
     .market-badge {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 6px 12px; border-radius: 20px;
-        font-size: 0.8rem; font-weight: 700;
-        margin-bottom: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 18px;
+        border-radius: 28px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        margin-bottom: 14px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        backdrop-filter: blur(12px);
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+        letter-spacing: 0.3px;
     }
-    .header-card .status-open { background: #00e676 !important; color: #003300 !important; animation: pulse 2s infinite; }
-    .header-card .status-pre { background: #ffea00 !important; color: #3e2723 !important; }
-    .header-card .status-after { background: #d1c4e9 !important; color: #4527a0 !important; }
-    .header-card .status-day { background: #00b0ff !important; color: #00251a !important; }
-    .header-card .status-closed { background: #eceff1 !important; color: #455a64 !important; border: 1px solid #cfd8dc; }
 
-    @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
-        70% { box-shadow: 0 0 0 10px rgba(0, 230, 118, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+    .status-open {
+        background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%) !important;
+        color: white !important;
+        animation: pulse-glow 2s ease-in-out infinite;
+        box-shadow: 
+            0 6px 20px rgba(16, 185, 129, 0.4),
+            0 0 30px rgba(16, 185, 129, 0.2) !important;
+    }
+
+    .status-pre {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%) !important;
+        color: #422006 !important;
+        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4) !important;
+    }
+
+    .status-after {
+        background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #7c3aed 100%) !important;
+        color: white !important;
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4) !important;
+    }
+
+    .status-day {
+        background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%) !important;
+        color: white !important;
+        box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4) !important;
+    }
+
+    .status-closed {
+        background: rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% {
+            box-shadow: 
+                0 6px 20px rgba(16, 185, 129, 0.5), 
+                0 0 30px rgba(16, 185, 129, 0.3),
+                0 0 0 0 rgba(16, 185, 129, 0.7);
+        }
+        50% {
+            box-shadow: 
+                0 8px 25px rgba(16, 185, 129, 0.7), 
+                0 0 40px rgba(16, 185, 129, 0.5),
+                0 0 0 8px rgba(16, 185, 129, 0);
+        }
     }
 
     .fx-badge {
-        background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px;
-        font-size: 0.8rem; font-weight: 600; backdrop-filter: blur(5px);
-        border: 1px solid rgba(255,255,255,0.2); color: white !important;
+        background: rgba(255, 255, 255, 0.3);
+        padding: 9px 16px;
+        border-radius: 18px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        backdrop-filter: blur(12px);
+        border: 1.5px solid rgba(255, 255, 255, 0.35);
+        color: white !important;
+        box-shadow: 
+            0 6px 15px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        letter-spacing: 0.3px;
     }
 
-    /* 4. 타임라인 & 핫픽 배너 */
-    .timeline-container { display: flex; gap: 8px; margin-top: 20px; }
+    /* ========================================
+       4. 타임라인 - 더욱 입체적인 유리 효과
+    ======================================== */
+    .timeline-container {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
     .glass-box {
-        flex: 1; text-align: center; background: rgba(255,255,255,0.1);
-        padding: 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15);
-        backdrop-filter: blur(4px);
+        flex: 1;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.18);
+        padding: 16px 10px;
+        border-radius: 20px;
+        border: 1.5px solid rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(12px);
+        box-shadow: 
+            0 6px 20px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .t-label { font-size: 0.7rem; color: rgba(255,255,255,0.8) !important; margin-bottom: 4px; }
-    .t-val { font-size: 0.9rem; font-weight: 700; color: #fff !important; white-space: nowrap; }
-    .accent-gold { color: #ffd700 !important; }
 
-    /* 🔥 1등 배너 스타일 */
+    .glass-box:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .t-label {
+        font-size: 0.72rem;
+        color: rgba(255, 255, 255, 0.9) !important;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        font-weight: 600;
+    }
+
+    .t-val {
+        font-size: 0.95rem;
+        font-weight: 900;
+        color: #fff !important;
+        white-space: nowrap;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        letter-spacing: -0.3px;
+    }
+
+    .accent-gold {
+        color: #ffd700 !important;
+        text-shadow: 
+            0 0 15px rgba(255, 215, 0, 0.6),
+            0 2px 8px rgba(0, 0, 0, 0.3);
+        animation: gold-shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes gold-shimmer {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.3); }
+    }
+
+    /* ========================================
+       5. HOT 배너 - 더욱 역동적인 효과
+    ======================================== */
     .hot-banner {
-        background: #fff; border-radius: 16px; padding: 12px 16px;
-        margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;
-        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.15); border: 1px solid #ccfbf1;
+        background: 
+            radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.04) 0%, transparent 50%),
+            linear-gradient(135deg, #ffffff 0%, #fef3f2 50%, #fff 100%);
+        border-radius: 24px;
+        padding: 18px 22px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 
+            0 10px 30px rgba(239, 68, 68, 0.18),
+            0 0 0 1px rgba(239, 68, 68, 0.08),
+            0 5px 15px rgba(0, 0, 0, 0.05);
+        border: 2px solid #fee2e2;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
     }
-    .hot-badge { background: #ef4444; color: white; padding: 4px 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; margin-right: 8px; }
-    .hot-text { font-size: 0.95rem; font-weight: 700; color: #374151; }
-    .hot-val { color: #0f766e; font-weight: 800; }
 
-    /* 5. 메인 정보 카드 */
+    .hot-banner:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+            0 15px 40px rgba(239, 68, 68, 0.25),
+            0 0 0 1px rgba(239, 68, 68, 0.12),
+            0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .hot-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: 
+            radial-gradient(circle, rgba(239, 68, 68, 0.05) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .hot-badge {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
+        color: white;
+        padding: 7px 14px;
+        border-radius: 14px;
+        font-size: 0.75rem;
+        font-weight: 900;
+        margin-right: 12px;
+        box-shadow: 
+            0 6px 18px rgba(239, 68, 68, 0.5),
+            0 0 20px rgba(239, 68, 68, 0.3);
+        position: relative;
+        z-index: 1;
+        letter-spacing: 0.5px;
+        animation: hot-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes hot-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .hot-text {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #374151;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hot-val {
+        color: #ef4444;
+        font-weight: 900;
+        font-size: 1.3rem;
+        position: relative;
+        z-index: 1;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+    }
+
+    /* ========================================
+       6. 메인 정보 카드 - 3D 효과 추가
+    ======================================== */
     .info-card {
-        background: white !important; border-radius: 24px; padding: 24px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.03); border: 1px solid #ccfbf1; margin-bottom: 20px;
+        background: 
+            radial-gradient(circle at 0% 0%, rgba(15, 118, 110, 0.02) 0%, transparent 50%),
+            white !important;
+        border-radius: 32px;
+        padding: 30px 26px;
+        box-shadow: 
+            0 15px 40px rgba(0, 0, 0, 0.08),
+            0 0 0 1px rgba(15, 118, 110, 0.06),
+            0 5px 15px rgba(15, 118, 110, 0.03);
+        border: 1px solid #e0f2fe;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
     }
-    .metric-grid { display: flex; gap: 8px; margin-top: 20px; }
+
+    .info-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+            0 20px 50px rgba(0, 0, 0, 0.12),
+            0 0 0 1px rgba(15, 118, 110, 0.08),
+            0 8px 20px rgba(15, 118, 110, 0.05);
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #0f766e 0%, #14b8a6 33%, #06b6d4 66%, #0ea5e9 100%);
+        box-shadow: 0 2px 10px rgba(15, 118, 110, 0.3);
+    }
+
+    .metric-grid {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
     .metric-box {
-        flex: 1; background: #f0fdfa !important; border-radius: 14px;
-        padding: 12px 6px; text-align: center; border: 1px solid #99f6e4; min-width: 0;
+        flex: 1;
+        background: 
+            radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.03) 0%, transparent 70%),
+            linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%) !important;
+        border-radius: 18px;
+        padding: 16px 10px;
+        text-align: center;
+        border: 1.5px solid #ccfbf1;
+        min-width: 0;
+        box-shadow: 
+            0 4px 12px rgba(15, 118, 110, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .m-title { font-size: 0.7rem; color: #0f766e !important; font-weight: 600; margin-bottom: 4px; white-space: nowrap; }
-    .m-data { font-size: 0.95rem; font-weight: 800; color: #115e59 !important; }
 
-    /* 6. 계산기 카드 */
-    .calc-card-bg { background: white !important; border-radius: 24px; padding: 20px; border: 1px solid #e0e0e0; margin-top: 10px; }
-    .calc-row { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
-    .calc-label { font-size: 0.9rem; color: #666 !important; }
-    .calc-val { font-weight: 700; color: #333 !important; }
-    .calc-divider { border-top: 1px dashed #ddd; margin: 12px 0; }
-    .calc-total-label { font-size: 1rem; font-weight: 700; color: #0d9488 !important; }
-    .calc-total-val { font-size: 1.4rem; font-weight: 800; color: #0f766e !important; }
+    .metric-box:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 
+            0 8px 20px rgba(15, 118, 110, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 1);
+        border-color: #5eead4;
+    }
 
-    /* 주의사항 박스 */
+    .m-title {
+        font-size: 0.7rem;
+        color: #0f766e !important;
+        font-weight: 700;
+        margin-bottom: 6px;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .m-data {
+        font-size: 1.05rem;
+        font-weight: 900;
+        color: #115e59 !important;
+        letter-spacing: -0.3px;
+    }
+
+    /* ========================================
+       7. 계산기 카드 - 더 입체적인 디자인
+    ======================================== */
+    .calc-card-bg {
+        background: 
+            radial-gradient(circle at 100% 0%, rgba(15, 118, 110, 0.02) 0%, transparent 50%),
+            white !important;
+        border-radius: 28px;
+        padding: 26px 22px;
+        border: 1.5px solid #e5e7eb;
+        margin-top: 12px;
+        box-shadow: 
+            0 6px 20px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+    }
+
+    .calc-card-bg:hover {
+        box-shadow: 
+            0 8px 25px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 1);
+    }
+
+    .calc-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        align-items: center;
+        padding: 4px 0;
+    }
+
+    .calc-label {
+        font-size: 0.92rem;
+        color: #64748b !important;
+        font-weight: 600;
+    }
+
+    .calc-val {
+        font-weight: 800;
+        color: #1e293b !important;
+        font-size: 0.95rem;
+        letter-spacing: -0.2px;
+    }
+
+    .calc-divider {
+        border-top: 2px solid #f1f5f9;
+        margin: 18px 0;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .calc-total-label {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #0d9488 !important;
+    }
+
+    .calc-total-val {
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: #0f766e !important;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 4px rgba(15, 118, 110, 0.1);
+    }
+
+    /* ========================================
+       8. 주의사항 박스 - 더 부드러운 느낌
+    ======================================== */
     .caution-box {
-        margin-top: 16px; padding: 14px; background: #fafafa !important; 
-        border-radius: 12px; border: 1px solid #eee;
-        font-size: 0.8rem; color: #767676 !important; line-height: 1.5;
+        margin-top: 18px;
+        padding: 18px 20px;
+        background: 
+            radial-gradient(circle at 100% 100%, rgba(15, 118, 110, 0.02) 0%, transparent 50%),
+            linear-gradient(135deg, #fafafa 0%, #f8fafc 100%) !important;
+        border-radius: 18px;
+        border: 1.5px solid #e5e7eb;
+        font-size: 0.8rem;
+        color: #64748b !important;
+        line-height: 1.7;
+        box-shadow: 
+            0 3px 10px rgba(0, 0, 0, 0.03),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
-    .caution-header { font-weight: 700; color: #555 !important; margin-bottom: 4px; display: block; }
 
-    /* 뱃지류 */
-    .badge-roc { background: #fff0f2 !important; color: #f04452 !important; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
-    .badge-safe { background: #e8fdf3 !important; color: #02cba5 !important; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
-    .ticker-tag { background: #ccfbf1 !important; color: #0f766e !important; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; }
+    .caution-header {
+        font-weight: 800;
+        color: #475569 !important;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.87rem;
+        letter-spacing: 0.2px;
+    }
 
-    /* 위젯 커스텀 */
+    /* ========================================
+       9. 뱃지 - 더 화려한 그라데이션
+    ======================================== */
+    .badge-safe {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 50%, #86efac 100%) !important;
+        color: #065f46 !important;
+        padding: 7px 14px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        box-shadow: 
+            0 4px 12px rgba(5, 150, 105, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        border: 1px solid #6ee7b7;
+        letter-spacing: 0.2px;
+    }
+
+    .ticker-tag {
+        background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 50%, #5eead4 100%) !important;
+        color: #0f766e !important;
+        padding: 7px 16px;
+        border-radius: 14px;
+        font-weight: 900;
+        font-size: 0.95rem;
+        box-shadow: 
+            0 4px 12px rgba(15, 118, 110, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        border: 1px solid #5eead4;
+        letter-spacing: -0.2px;
+    }
+
+    /* ========================================
+       10. 버튼 스타일 - 더욱 입체적
+    ======================================== */
     div.stButton > button {
-        width: 100%; border-radius: 12px; font-weight: 700;
-        background: #fff !important; border: 1px solid #e5e8eb !important;
-        color: #6b7684 !important; height: 48px; transition: all 0.2s;
+        width: 100%;
+        border-radius: 18px;
+        font-weight: 800;
+        background: 
+            radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.02) 0%, transparent 50%),
+            linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+        border: 2px solid #e2e8f0 !important;
+        color: #475569 !important;
+        height: 54px;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 
+            0 4px 12px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        letter-spacing: 0.2px;
     }
-    div.stButton > button:hover { background: #f0fdfa !important; color: #0f766e !important; border-color: #99f6e4 !important; }
 
-    /* ------------------------------------------------------------- */
-    /* [완벽 수정] 탭 메뉴(Radio) 가로 스크롤 & 활성 색상 강제 적용 */
-    /* ------------------------------------------------------------- */
+    div.stButton > button:hover {
+        background: 
+            radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.05) 0%, transparent 50%),
+            linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%) !important;
+        color: #0f766e !important;
+        border-color: #14b8a6 !important;
+        transform: translateY(-3px);
+        box-shadow: 
+            0 8px 20px rgba(15, 118, 110, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 1);
+    }
 
-    /* 1. 컨테이너: 무조건 한 줄(nowrap), 가로 스크롤 허용 */
+    div.stButton > button:active {
+        transform: translateY(-1px);
+    }
+
+    /* ========================================
+       11. 탭 메뉴 (Radio) - 최고급 스타일
+    ======================================== */
     div[data-testid="stRadio"] > div[role="radiogroup"] {
         display: flex !important;
         flex-direction: row !important;
-        flex-wrap: nowrap !important; /* 줄바꿈 절대 금지 */
-        overflow-x: auto !important;  /* 가로 스크롤 허용 */
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
         white-space: nowrap !important;
-        gap: 8px !important;
-        padding-bottom: 8px !important;
-        -webkit-overflow-scrolling: touch !important; /* 아이폰 부드러운 스크롤 */
+        gap: 12px !important;
+        padding-bottom: 12px !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin;
+        scrollbar-color: #14b8a6 #f1f5f9;
     }
 
-    /* 2. 스크롤바 스타일링 (PC에서도 인지 가능하도록 얇게 표시) */
     div[role="radiogroup"]::-webkit-scrollbar {
-        height: 3px;
-    }
-    div[role="radiogroup"]::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 10px;
+        height: 5px;
     }
 
-    /* 3. 버튼(Label) 기본 스타일 */
+    div[role="radiogroup"]::-webkit-scrollbar-track {
+        background: linear-gradient(to right, #f1f5f9, #e0f2fe);
+        border-radius: 10px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    div[role="radiogroup"]::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #06b6d4 100%);
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(15, 118, 110, 0.3);
+    }
+
+    div[role="radiogroup"]::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #115e59 0%, #0f766e 50%, #14b8a6 100%);
+    }
+
     div[data-testid="stRadio"] label {
-        background-color: #ffffff !important;
-        border: 1px solid #e5e8eb !important;
-        border-radius: 24px !important;
-        padding: 10px 20px !important;
+        background: 
+            radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.02) 0%, transparent 50%),
+            linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+        border: 2px solid #e5e8eb !important;
+        border-radius: 32px !important;
+        padding: 13px 24px !important;
         margin-right: 0 !important;
         font-size: 0.9rem !important;
-        font-weight: 700 !important;
-        color: #6b7684 !important;
+        font-weight: 800 !important;
+        color: #64748b !important;
         cursor: pointer !important;
-        transition: all 0.2s ease-in-out !important;
-
-        /* 찌그러짐 방지 핵심 속성 */
-        flex: 0 0 auto !important; 
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        flex: 0 0 auto !important;
         min-width: max-content !important;
-
-        box-shadow: 0 2px 5px rgba(0,0,0,0.03) !important;
+        box-shadow: 
+            0 3px 10px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+        letter-spacing: 0.2px;
     }
 
-    /* 4. 라디오 기본 원형 숨기기 */
     div[data-testid="stRadio"] label > div:first-child {
         display: none !important;
     }
 
-    /* 5. [Active State] 선택된 버튼 스타일 (배경색 변경) */
     div[data-testid="stRadio"] label:has(input:checked) {
-        background-color: #0f766e !important; /* Theme Color */
+        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #06b6d4 100%) !important;
         border-color: #0f766e !important;
-        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.4) !important;
-        transform: translateY(-1px);
+        box-shadow: 
+            0 8px 20px rgba(15, 118, 110, 0.4),
+            0 0 0 4px rgba(15, 118, 110, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-3px) scale(1.03);
     }
 
-    /* 6. [Active Text] 선택된 버튼 글자색 (하위 모든 요소 강제 흰색) */
     div[data-testid="stRadio"] label:has(input:checked) * {
+        color: #ffffff !important;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    div[data-testid="stRadio"] label:hover {
+        border-color: #14b8a6 !important;
+        transform: translateY(-2px);
+        box-shadow: 
+            0 6px 15px rgba(15, 118, 110, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+    }
+
+    div[data-testid="stRadio"] label:has(input:checked):hover * {
         color: #ffffff !important;
     }
 
-    /* 7. 호버 효과 */
-    div[data-testid="stRadio"] label:hover {
-        border-color: #0f766e !important;
-        color: #0f766e !important;
-    }
-    /* 선택된 상태에서는 호버해도 흰색 유지 */
-    div[data-testid="stRadio"] label:has(input:checked):hover * {
-        color: #ffffff !important; 
+    /* ========================================
+       12. Input 스타일 - 더욱 세련되게
+    ======================================== */
+    .stNumberInput > div > div > input {
+        border-radius: 14px !important;
+        border: 2px solid #e5e7eb !important;
+        padding: 13px 18px !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 
+            0 2px 8px rgba(0, 0, 0, 0.03),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
     }
 
-    /* 모바일 반응형 */
+    .stNumberInput > div > div > input:focus {
+        border-color: #14b8a6 !important;
+        box-shadow: 
+            0 0 0 4px rgba(20, 184, 166, 0.12),
+            0 4px 12px rgba(20, 184, 166, 0.15) !important;
+        transform: translateY(-1px);
+    }
+
+    .stSelectbox > div > div {
+        border-radius: 14px !important;
+        border: 2px solid #e5e7eb !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .stSelectbox > div > div:focus-within {
+        border-color: #14b8a6 !important;
+        box-shadow: 
+            0 0 0 4px rgba(20, 184, 166, 0.12),
+            0 4px 12px rgba(20, 184, 166, 0.15) !important;
+        transform: translateY(-1px);
+    }
+
+    .stMultiSelect > div > div {
+        border-radius: 14px !important;
+        border: 2px solid #e5e7eb !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    /* ========================================
+       13. 섹션 타이틀 - 더욱 강렬하게
+    ======================================== */
+    h3 {
+        font-weight: 900 !important;
+        color: #0f172a !important;
+        margin-bottom: 18px !important;
+        font-size: 1.35rem !important;
+        letter-spacing: -0.7px !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    h5 {
+        font-weight: 800 !important;
+        letter-spacing: -0.3px !important;
+    }
+
+    /* ========================================
+       14. 추가 인터랙티브 요소
+    ======================================== */
+    .stDivider {
+        margin: 12px 0 !important;
+    }
+
+    /* Info 박스 스타일 */
+    .stInfo {
+        background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%) !important;
+        border-radius: 16px !important;
+        border: 1.5px solid #bfdbfe !important;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1) !important;
+    }
+
+    /* ========================================
+       15. 모바일 반응형 - 완벽 최적화
+    ======================================== */
     @media (max-width: 480px) {
-        .header-card { padding: 24px 16px; }
-        .header-card h2 { font-size: 1.3rem !important; }
-        .hot-text { font-size: 0.85rem; }
-        .info-card { padding: 20px 16px; }
-        div[data-testid="stRadio"] label { padding: 8px 16px !important; font-size: 0.85rem !important; }
+        .header-card {
+            padding: 28px 20px;
+            border-radius: 28px;
+        }
+
+        .header-card h2 {
+            font-size: 1.3rem !important;
+            line-height: 1.45;
+        }
+
+        .hot-text {
+            font-size: 0.88rem;
+        }
+
+        .hot-val {
+            font-size: 1.15rem;
+        }
+
+        .info-card {
+            padding: 24px 20px;
+        }
+
+        .metric-box {
+            padding: 13px 8px;
+        }
+
+        .m-data {
+            font-size: 0.95rem;
+        }
+
+        div[data-testid="stRadio"] label {
+            padding: 11px 20px !important;
+            font-size: 0.87rem !important;
+        }
+
+        .calc-card-bg {
+            padding: 22px 18px;
+        }
+
+        .fx-badge {
+            font-size: 0.82rem;
+            padding: 7px 13px;
+        }
+
+        .glass-box {
+            padding: 13px 8px;
+        }
+
+        .t-val {
+            font-size: 0.88rem;
+        }
+
+        .calc-total-val {
+            font-size: 1.45rem;
+        }
+
+        h3 {
+            font-size: 1.25rem !important;
+        }
+    }
+
+    /* ========================================
+       16. 스크롤바 전역 스타일 - 최고급
+    ======================================== */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: linear-gradient(to bottom, #f1f5f9, #e0f2fe);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #06b6d4 100%);
+        border-radius: 10px;
+        box-shadow: 
+            0 2px 5px rgba(15, 118, 110, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #115e59 0%, #0f766e 50%, #14b8a6 100%);
+        box-shadow: 
+            0 3px 8px rgba(15, 118, 110, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    /* ========================================
+       17. 세부 폴리싱
+    ======================================== */
+    /* Caption 스타일 */
+    .stCaption {
+        font-weight: 600 !important;
+        letter-spacing: 0.1px !important;
+    }
+
+    /* 차트 스타일링 */
+    .stLineChart {
+        border-radius: 16px !important;
+        overflow: hidden !important;
+    }
+
+    /* Expander 스타일 */
+    .streamlit-expanderHeader {
+        font-weight: 700 !important;
+        border-radius: 14px !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .streamlit-expanderHeader:hover {
+        background: rgba(15, 118, 110, 0.05) !important;
+    }
+
+    /* 선택된 요소들의 애니메이션 최적화 */
+    * {
+        -webkit-tap-highlight-color: rgba(15, 118, 110, 0.1);
     }
     </style>
 """)
@@ -355,7 +997,7 @@ render_html(f"""
             </div>
             <div style="text-align:right;">
                 <div class="fx-badge">🇺🇸 1$ = {usd_krw:,.0f}원</div>
-                <div style="font-size:0.7rem; margin-top:4px; opacity:0.8;">{update_time} 기준</div>
+                <div style="font-size:0.7rem; margin-top:4px; opacity:0.85;">{update_time} 기준</div>
             </div>
         </div>
         <div class="header-content timeline-container">
@@ -380,7 +1022,7 @@ render_html(f"""
     <div class="hot-banner">
         <div style="display:flex; align-items:center;">
             <span class="hot-badge">HOT 🔥</span>
-            <span class="hot-text">이번 주 배당킹은 <span style="color:#0f766e;">{best_ticker}</span></span>
+            <span class="hot-text">이번 주 배당킹은 <span style="color:#0f766e; font-weight:800;">{best_ticker}</span></span>
         </div>
         <span class="hot-val">{best_rate}%</span>
     </div>
@@ -405,8 +1047,8 @@ sec_disp = f"{d['sec']}%" if d['sec'] != 0 else "-"
 
 render_html(f"""
     <div class="info-card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <div style="display:flex; align-items:center; gap:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                 <span class="ticker-tag">{sel_ticker}</span>
                 {risk_badge}
             </div>
@@ -414,7 +1056,7 @@ render_html(f"""
         </div>
 
         <div style="text-align:center; padding: 10px 0;">
-            <div style="font-size:0.85rem; color:#0f766e; margin-bottom:6px;">1주당 확정 배당금</div>
+            <div style="font-size:0.85rem; color:#0f766e; margin-bottom:6px; font-weight:600;">1주당 확정 배당금</div>
             <div style="font-size:2.4rem; font-weight:900; color:#0d9488; letter-spacing:-1px; line-height:1;">
                 ${d['div']:.4f}
             </div>
@@ -513,10 +1155,10 @@ if current_tab == "💼 포트폴리오":
         total_post_krw = total_pre_krw * (1 - tax_rate)
 
         render_html(f"""
-            <div class="calc-card-bg" style="margin-top:10px; background:#f0fdfa; border:1px solid #ccfbf1;">
+            <div class="calc-card-bg" style="margin-top:10px; background:radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.03) 0%, transparent 50%), linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%); border:2px solid #99f6e4;">
                 <div style="text-align:center;">
-                    <div style="font-size:0.9rem; color:#0f766e; margin-bottom:8px; font-weight:600;">이번 주 예상 수령액 (합계)</div>
-                    <div style="font-size:1.8rem; font-weight:800; color:#0d9488;">{total_post_krw:,.0f}원</div>
+                    <div style="font-size:0.9rem; color:#0f766e; margin-bottom:8px; font-weight:700;">이번 주 예상 수령액 (합계)</div>
+                    <div style="font-size:1.9rem; font-weight:900; color:#0d9488; letter-spacing:-0.5px;">{total_post_krw:,.0f}원</div>
                     <div style="font-size:0.85rem; color:#6b7280; margin-top:4px;">(세전 {total_pre_krw:,.0f}원)</div>
                 </div>
             </div>
@@ -591,14 +1233,14 @@ elif current_tab == "💧 물타기":
 
     render_html(f"""
         <div class="calc-card-bg">
-            <div style="font-size:0.9rem; color:#666; margin-bottom:8px;">평단가 변화</div>
-            <div style="font-size:1.3rem; font-weight:700; display:flex; align-items:center; gap:8px;">
-                ${my_avg:.2f} <span style="color:#ccc;">➔</span> <span style="color:#0f766e;">${new_avg:.2f}</span>
+            <div style="font-size:0.9rem; color:#666; margin-bottom:8px; font-weight:600;">평단가 변화</div>
+            <div style="font-size:1.35rem; font-weight:800; display:flex; align-items:center; gap:10px;">
+                ${my_avg:.2f} <span style="color:#cbd5e1; font-size:1.2rem;">➔</span> <span style="color:#0f766e;">${new_avg:.2f}</span>
             </div>
-            <div style="background:#f0fdfa; border-radius:12px; padding:12px; margin-top:16px;">
-                <div style="font-size:0.85rem; color:#0f766e; font-weight:600;">🚀 탈출 기간 단축</div>
-                <div style="font-size:1rem; font-weight:700; color:#0f766e; margin-top:4px;">
-                    {old_w:.1f}주 ➔ {new_w:.1f}주 <span style="color:#00c853;">(-{saved:.1f}주 단축)</span>
+            <div style="background:radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.03) 0%, transparent 50%), linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%); border-radius:14px; padding:14px; margin-top:16px;">
+                <div style="font-size:0.88rem; color:#0f766e; font-weight:700;">🚀 탈출 기간 단축</div>
+                <div style="font-size:1.05rem; font-weight:800; color:#0f766e; margin-top:6px;">
+                    {old_w:.1f}주 ➔ {new_w:.1f}주 <span style="color:#10b981;">(-{saved:.1f}주 단축)</span>
                 </div>
             </div>
         </div>
@@ -618,9 +1260,9 @@ elif current_tab == "🧪 스트레스":
 
     render_html(f"""
         <div class="calc-card-bg">
-            <div class="calc-row" style="background:#f0fdfa; padding:8px; border-radius:8px;">
+            <div class="calc-row" style="background:radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.03) 0%, transparent 50%), linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%); padding:10px; border-radius:10px;">
                 <span class="calc-label">⚡ 현재 유지</span>
-                <span class="calc-val" style="color:#0f766e;">{base_pay:,.0f}원</span>
+                <span class="calc-val" style="color:#0f766e; font-weight:900;">{base_pay:,.0f}원</span>
             </div>
             <div class="calc-row">
                 <span class="calc-label">📉 -10% 삭감</span>
@@ -631,8 +1273,8 @@ elif current_tab == "🧪 스트레스":
                 <span class="calc-val">{base_pay*0.7:,.0f}원</span>
             </div>
             <div class="calc-row">
-                <span class="calc-label" style="color:#e92c2c;">📉 -50% 삭감</span>
-                <span class="calc-val" style="color:#e92c2c;">{base_pay*0.5:,.0f}원</span>
+                <span class="calc-label" style="color:#e92c2c; font-weight:700;">📉 -50% 삭감</span>
+                <span class="calc-val" style="color:#e92c2c; font-weight:900;">{base_pay*0.5:,.0f}원</span>
             </div>
         </div>
         <div class="caution-box">
@@ -656,12 +1298,12 @@ elif current_tab == "📉 원금회수":
 
     render_html(f"""
         <div class="calc-card-bg" style="text-align:center;">
-            <div style="font-size:0.9rem; color:#666; margin-bottom:8px;">원금 회수(Free Ride)까지</div>
-            <div style="font-size:2rem; font-weight:900; color:#e92c2c; letter-spacing:-1px;">
-                {w_need:.1f}주 <span style="font-size:1rem; color:#999; font-weight:500;">(약 {m_need:.1f}개월)</span>
+            <div style="font-size:0.92rem; color:#666; margin-bottom:10px; font-weight:600;">원금 회수(Free Ride)까지</div>
+            <div style="font-size:2.1rem; font-weight:900; color:#e92c2c; letter-spacing:-1px;">
+                {w_need:.1f}주 <span style="font-size:1.05rem; color:#999; font-weight:600;">(약 {m_need:.1f}개월)</span>
             </div>
-            <div style="margin-top:12px; font-size:0.85rem; color:#d32f2f; background:#fff0f2; padding:8px; border-radius:8px;">
-                💡 <b>{w_need:.0f}번</b>만 배당 받으면 본전입니다!
+            <div style="margin-top:14px; font-size:0.88rem; color:#d32f2f; background:radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.03) 0%, transparent 50%), linear-gradient(135deg, #fff0f2 0%, #ffe4e6 100%); padding:10px; border-radius:10px; font-weight:600;">
+                💡 <b style="font-size:1rem;">{w_need:.0f}번</b>만 배당 받으면 본전입니다!
             </div>
         </div>
         <div class="caution-box">
@@ -684,18 +1326,18 @@ elif current_tab == "🔥 FIRE":
 
     render_html(f"""
         <div class="calc-card-bg">
-            <div style="text-align:center; margin-bottom:16px;">
-                <div style="font-size:0.9rem; color:#666;">매주 <b style="color:#0f766e;">{target}만원</b> 받으려면?</div>
+            <div style="text-align:center; margin-bottom:18px;">
+                <div style="font-size:0.92rem; color:#666; font-weight:600;">매주 <b style="color:#0f766e; font-size:1.1rem;">{target}만원</b> 받으려면?</div>
             </div>
-            <div style="display:flex; justify-content:space-around; align-items:center;">
+            <div style="display:flex; justify-content:space-around; align-items:center; gap:10px;">
                 <div style="text-align:center;">
-                    <div style="font-size:0.8rem; color:#888;">필요 주식</div>
-                    <div style="font-size:1.2rem; font-weight:800; color:#333;">{req_shares:,}주</div>
+                    <div style="font-size:0.82rem; color:#888; font-weight:600;">필요 주식</div>
+                    <div style="font-size:1.25rem; font-weight:900; color:#333;">{req_shares:,}주</div>
                 </div>
-                <div style="width:1px; height:30px; background:#eee;"></div>
+                <div style="width:2px; height:35px; background:linear-gradient(to bottom, transparent, #e5e7eb, transparent);"></div>
                 <div style="text-align:center;">
-                    <div style="font-size:0.8rem; color:#888;">예상 투자금</div>
-                    <div style="font-size:1.2rem; font-weight:800; color:#0f766e;">{req_money/10000:,.0f}만원</div>
+                    <div style="font-size:0.82rem; color:#888; font-weight:600;">예상 투자금</div>
+                    <div style="font-size:1.25rem; font-weight:900; color:#0f766e;">{req_money/10000:,.0f}만원</div>
                 </div>
             </div>
         </div>
@@ -723,17 +1365,17 @@ elif current_tab == "⛄ 스노우볼":
         add_cnt, rem_cash, next_inc = 0, 0, 0
 
     render_html(f"""
-        <div class="calc-card-bg" style="background:linear-gradient(135deg, #f0fdfa 0%, #fff 100%);">
-            <div style="text-align:center; margin-bottom:10px;">
-                <span style="font-size:0.9rem; color:#555;">이번 배당금으로</span><br>
-                <span style="font-size:1.5rem; font-weight:900; color:#0f766e;">+{add_cnt}주</span>
-                <span style="font-size:1rem; font-weight:700;"> 추가 매수!</span>
+        <div class="calc-card-bg" style="background:radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.03) 0%, transparent 50%), linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);">
+            <div style="text-align:center; margin-bottom:12px;">
+                <span style="font-size:0.92rem; color:#555; font-weight:600;">이번 배당금으로</span><br>
+                <span style="font-size:1.6rem; font-weight:900; color:#0f766e;">+{add_cnt}주</span>
+                <span style="font-size:1.05rem; font-weight:800;"> 추가 매수!</span>
             </div>
-            <div style="background:white; border-radius:12px; padding:12px; text-align:center; border:1px solid #ccfbf1;">
-                <div style="font-size:0.8rem; color:#888;">다음 주 늘어나는 배당금</div>
-                <div style="font-size:1.1rem; font-weight:800; color:#0f766e;">+{next_inc:,.0f}원 🆙</div>
+            <div style="background:white; border-radius:14px; padding:14px; text-align:center; border:2px solid #99f6e4; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.08);">
+                <div style="font-size:0.82rem; color:#888; font-weight:600;">다음 주 늘어나는 배당금</div>
+                <div style="font-size:1.15rem; font-weight:900; color:#0f766e;">+{next_inc:,.0f}원 🆙</div>
             </div>
-            <div style="text-align:center; font-size:0.75rem; color:#999; margin-top:8px;">
+            <div style="text-align:center; font-size:0.77rem; color:#999; margin-top:10px; font-weight:500;">
                 (남는 돈 {rem_cash:,.0f}원은 간식비 ☕)
             </div>
         </div>
@@ -767,13 +1409,13 @@ elif current_tab == "⛄ 스노우볼":
 st.write("")
 with st.expander("🎓 주린이 용어 가이드"):
     render_html("""
-    <div style="padding:10px; font-size:0.85rem; line-height:1.6; color:#555;">
+    <div style="padding:12px; font-size:0.85rem; line-height:1.7; color:#555;">
         <p><b>1️⃣ Distribution Rate (분배율)</b><br>
         이번 배당금을 1년 내내 똑같이 준다고 가정했을 때의 연 수익률입니다.</p>
         <p><b>2️⃣ 30-Day SEC Yield</b><br>
         최근 30일간 펀드가 실제로 벌어들인 이자 수익(펀더멘털)입니다.</p>
         <p><b>3️⃣ ROC (Return of Capital)</b><br>
-        <span style="color:#e92c2c;">⚠️ 중요!</span> 펀드가 번 돈이 아니라, <b>투자 원금을 깎아서</b> 배당으로 준 비율입니다.
+        <span style="color:#e92c2c; font-weight:700;">⚠️ 중요!</span> 펀드가 번 돈이 아니라, <b>투자 원금을 깎아서</b> 배당으로 준 비율입니다.
         이번 Roundhill 배당은 <b>전액 ROC(100%)</b>로, 당장 세금은 없지만 평단가가 낮아집니다.</p>
     </div>
     """)
