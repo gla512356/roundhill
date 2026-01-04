@@ -69,7 +69,7 @@ render_html("""
         overflow: hidden;
         backdrop-filter: blur(10px);
     }
-
+    
     /* 파티클 효과 */
     .header-card::before {
         content: '';
@@ -83,7 +83,7 @@ render_html("""
         z-index: 0;
         animation: float 8s ease-in-out infinite;
     }
-
+    
     .header-card::after {
         content: '';
         position: absolute;
@@ -96,7 +96,7 @@ render_html("""
         z-index: 0;
         animation: float 10s ease-in-out infinite reverse;
     }
-
+    
     @keyframes float {
         0%, 100% { transform: translate(0, 0) scale(1); }
         50% { transform: translate(20px, 20px) scale(1.1); }
@@ -130,7 +130,7 @@ render_html("""
         border: 1.5px solid rgba(255, 255, 255, 0.3);
         letter-spacing: 0.3px;
     }
-
+    
     .status-open {
         background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%) !important;
         color: white !important;
@@ -139,25 +139,25 @@ render_html("""
             0 6px 20px rgba(16, 185, 129, 0.4),
             0 0 30px rgba(16, 185, 129, 0.2) !important;
     }
-
+    
     .status-pre {
         background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%) !important;
         color: #422006 !important;
         box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4) !important;
     }
-
+    
     .status-after {
         background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #7c3aed 100%) !important;
         color: white !important;
         box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4) !important;
     }
-
+    
     .status-day {
         background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%) !important;
         color: white !important;
         box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4) !important;
     }
-
+    
     .status-closed {
         background: rgba(255, 255, 255, 0.3) !important;
         color: white !important;
@@ -203,7 +203,7 @@ render_html("""
         gap: 12px;
         margin-top: 24px;
     }
-
+    
     .glass-box {
         flex: 1;
         text-align: center;
@@ -217,7 +217,7 @@ render_html("""
             inset 0 1px 0 rgba(255, 255, 255, 0.3);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
+    
     .glass-box:hover {
         background: rgba(255, 255, 255, 0.25);
         transform: translateY(-3px) scale(1.02);
@@ -225,7 +225,7 @@ render_html("""
             0 10px 30px rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.4);
     }
-
+    
     .t-label {
         font-size: 0.72rem;
         color: rgba(255, 255, 255, 0.9) !important;
@@ -234,7 +234,7 @@ render_html("""
         letter-spacing: 0.8px;
         font-weight: 600;
     }
-
+    
     .t-val {
         font-size: 0.95rem;
         font-weight: 900;
@@ -243,7 +243,7 @@ render_html("""
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         letter-spacing: -0.3px;
     }
-
+    
     .accent-gold {
         color: #ffd700 !important;
         text-shadow: 
@@ -251,7 +251,7 @@ render_html("""
             0 2px 8px rgba(0, 0, 0, 0.3);
         animation: gold-shimmer 3s ease-in-out infinite;
     }
-
+    
     @keyframes gold-shimmer {
         0%, 100% { filter: brightness(1); }
         50% { filter: brightness(1.3); }
@@ -279,7 +279,7 @@ render_html("""
         overflow: hidden;
         transition: all 0.3s ease;
     }
-
+    
     .hot-banner:hover {
         transform: translateY(-2px);
         box-shadow: 
@@ -287,7 +287,7 @@ render_html("""
             0 0 0 1px rgba(239, 68, 68, 0.12),
             0 8px 20px rgba(0, 0, 0, 0.08);
     }
-
+    
     .hot-banner::before {
         content: '';
         position: absolute;
@@ -299,12 +299,12 @@ render_html("""
             radial-gradient(circle, rgba(239, 68, 68, 0.05) 0%, transparent 70%);
         animation: rotate 20s linear infinite;
     }
-
+    
     @keyframes rotate {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
     }
-
+    
     .hot-badge {
         background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
         color: white;
@@ -321,12 +321,12 @@ render_html("""
         letter-spacing: 0.5px;
         animation: hot-pulse 2s ease-in-out infinite;
     }
-
+    
     @keyframes hot-pulse {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.05); }
     }
-
+    
     .hot-text {
         font-size: 0.95rem;
         font-weight: 700;
@@ -334,7 +334,7 @@ render_html("""
         position: relative;
         z-index: 1;
     }
-
+    
     .hot-val {
         color: #ef4444;
         font-weight: 900;
@@ -364,7 +364,7 @@ render_html("""
         overflow: hidden;
         transition: all 0.3s ease;
     }
-
+    
     .info-card:hover {
         transform: translateY(-2px);
         box-shadow: 
@@ -372,7 +372,7 @@ render_html("""
             0 0 0 1px rgba(15, 118, 110, 0.08),
             0 8px 20px rgba(15, 118, 110, 0.05);
     }
-
+    
     .info-card::before {
         content: '';
         position: absolute;
@@ -389,7 +389,7 @@ render_html("""
         gap: 12px;
         margin-top: 24px;
     }
-
+    
     .metric-box {
         flex: 1;
         background: 
@@ -405,7 +405,7 @@ render_html("""
             inset 0 1px 0 rgba(255, 255, 255, 0.8);
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
+    
     .metric-box:hover {
         transform: translateY(-3px) scale(1.02);
         box-shadow: 
@@ -413,17 +413,19 @@ render_html("""
             inset 0 1px 0 rgba(255, 255, 255, 1);
         border-color: #5eead4;
     }
-
+    
     .m-title {
         font-size: 0.7rem;
         color: #0f766e !important;
         font-weight: 700;
         margin-bottom: 6px;
-        white-space: nowrap;
+        white-space: normal;
+        word-break: keep-all;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.3px;
+        line-height: 1.3;
     }
-
+    
     .m-data {
         font-size: 1.05rem;
         font-weight: 900;
@@ -447,13 +449,13 @@ render_html("""
             inset 0 1px 0 rgba(255, 255, 255, 0.8);
         transition: all 0.3s ease;
     }
-
+    
     .calc-card-bg:hover {
         box-shadow: 
             0 8px 25px rgba(0, 0, 0, 0.08),
             inset 0 1px 0 rgba(255, 255, 255, 1);
     }
-
+    
     .calc-row {
         display: flex;
         justify-content: space-between;
@@ -461,32 +463,32 @@ render_html("""
         align-items: center;
         padding: 4px 0;
     }
-
+    
     .calc-label {
         font-size: 0.92rem;
         color: #64748b !important;
         font-weight: 600;
     }
-
+    
     .calc-val {
         font-weight: 800;
         color: #1e293b !important;
         font-size: 0.95rem;
         letter-spacing: -0.2px;
     }
-
+    
     .calc-divider {
         border-top: 2px solid #f1f5f9;
         margin: 18px 0;
         box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
     }
-
+    
     .calc-total-label {
         font-size: 1.1rem;
         font-weight: 800;
         color: #0d9488 !important;
     }
-
+    
     .calc-total-val {
         font-size: 1.6rem;
         font-weight: 900;
@@ -513,7 +515,7 @@ render_html("""
             0 3px 10px rgba(0, 0, 0, 0.03),
             inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
-
+    
     .caution-header {
         font-weight: 800;
         color: #475569 !important;
@@ -539,7 +541,7 @@ render_html("""
         border: 1px solid #6ee7b7;
         letter-spacing: 0.2px;
     }
-
+    
     .ticker-tag {
         background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 50%, #5eead4 100%) !important;
         color: #0f766e !important;
@@ -574,7 +576,7 @@ render_html("""
         font-size: 0.95rem;
         letter-spacing: 0.2px;
     }
-
+    
     div.stButton > button:hover {
         background: 
             radial-gradient(circle at 50% 0%, rgba(15, 118, 110, 0.05) 0%, transparent 50%),
@@ -586,7 +588,7 @@ render_html("""
             0 8px 20px rgba(15, 118, 110, 0.25),
             inset 0 1px 0 rgba(255, 255, 255, 1);
     }
-
+    
     div.stButton > button:active {
         transform: translateY(-1px);
     }
@@ -610,19 +612,19 @@ render_html("""
     div[role="radiogroup"]::-webkit-scrollbar {
         height: 5px;
     }
-
+    
     div[role="radiogroup"]::-webkit-scrollbar-track {
         background: linear-gradient(to right, #f1f5f9, #e0f2fe);
         border-radius: 10px;
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
     }
-
+    
     div[role="radiogroup"]::-webkit-scrollbar-thumb {
         background: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #06b6d4 100%);
         border-radius: 10px;
         box-shadow: 0 2px 5px rgba(15, 118, 110, 0.3);
     }
-
+    
     div[role="radiogroup"]::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(135deg, #115e59 0%, #0f766e 50%, #14b8a6 100%);
     }
@@ -692,7 +694,7 @@ render_html("""
             0 2px 8px rgba(0, 0, 0, 0.03),
             inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
     }
-
+    
     .stNumberInput > div > div > input:focus {
         border-color: #14b8a6 !important;
         box-shadow: 
@@ -707,7 +709,7 @@ render_html("""
         transition: all 0.3s ease !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
     }
-
+    
     .stSelectbox > div > div:focus-within {
         border-color: #14b8a6 !important;
         box-shadow: 
@@ -762,60 +764,94 @@ render_html("""
             padding: 28px 20px;
             border-radius: 28px;
         }
-
+        
         .header-card h2 {
             font-size: 1.3rem !important;
             line-height: 1.45;
         }
-
+        
         .hot-text {
             font-size: 0.88rem;
         }
-
+        
         .hot-val {
             font-size: 1.15rem;
         }
-
+        
         .info-card {
             padding: 24px 20px;
         }
-
+        
+        /* 메트릭 박스 - 모바일에서 더 넓게 */
+        .metric-grid {
+            gap: 8px;
+        }
+        
         .metric-box {
-            padding: 13px 8px;
+            padding: 14px 6px;
         }
-
+        
+        .m-title {
+            font-size: 0.65rem !important;
+            letter-spacing: 0.2px !important;
+            margin-bottom: 4px !important;
+        }
+        
         .m-data {
-            font-size: 0.95rem;
+            font-size: 0.95rem !important;
         }
-
+        
+        /* 탭 메뉴 - 모바일에서 더 읽기 쉽게 */
         div[data-testid="stRadio"] label {
-            padding: 11px 20px !important;
-            font-size: 0.87rem !important;
+            padding: 11px 18px !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0px !important;
         }
-
+        
         .calc-card-bg {
             padding: 22px 18px;
         }
-
+        
         .fx-badge {
             font-size: 0.82rem;
             padding: 7px 13px;
         }
-
+        
         .glass-box {
-            padding: 13px 8px;
+            padding: 13px 6px;
         }
-
+        
+        .t-label {
+            font-size: 0.65rem !important;
+            letter-spacing: 0.5px !important;
+        }
+        
         .t-val {
-            font-size: 0.88rem;
+            font-size: 0.85rem !important;
         }
-
+        
         .calc-total-val {
             font-size: 1.45rem;
         }
-
+        
         h3 {
             font-size: 1.25rem !important;
+        }
+        
+        /* 티커 태그 & 뱃지 - 모바일 최적화 */
+        .ticker-tag {
+            font-size: 0.9rem !important;
+            padding: 6px 13px !important;
+        }
+        
+        .badge-safe {
+            font-size: 0.7rem !important;
+            padding: 6px 11px !important;
+        }
+        
+        /* 배당금 표시 - 모바일 크기 조정 */
+        .info-card > div > div:nth-child(2) > div:nth-child(1) {
+            font-size: 2.1rem !important;
         }
     }
 
@@ -826,12 +862,12 @@ render_html("""
         width: 10px;
         height: 10px;
     }
-
+    
     ::-webkit-scrollbar-track {
         background: linear-gradient(to bottom, #f1f5f9, #e0f2fe);
         border-radius: 10px;
     }
-
+    
     ::-webkit-scrollbar-thumb {
         background: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #06b6d4 100%);
         border-radius: 10px;
@@ -839,7 +875,7 @@ render_html("""
             0 2px 5px rgba(15, 118, 110, 0.3),
             inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
-
+    
     ::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(135deg, #115e59 0%, #0f766e 50%, #14b8a6 100%);
         box-shadow: 
@@ -1047,12 +1083,12 @@ sec_disp = f"{d['sec']}%" if d['sec'] != 0 else "-"
 
 render_html(f"""
     <div class="info-card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <span class="ticker-tag">{sel_ticker}</span>
                 {risk_badge}
             </div>
-            <span style="font-size:0.75rem; color:#888;">{d['name']}</span>
+            <span style="font-size:0.72rem; color:#888; font-weight:600;">{d['name']}</span>
         </div>
 
         <div style="text-align:center; padding: 10px 0;">
@@ -1060,7 +1096,7 @@ render_html(f"""
             <div style="font-size:2.4rem; font-weight:900; color:#0d9488; letter-spacing:-1px; line-height:1;">
                 ${d['div']:.4f}
             </div>
-            <div style="font-size:1.1rem; font-weight:700; margin-top:8px;">
+            <div style="font-size:1.05rem; font-weight:700; margin-top:8px; line-height:1.5;">
                 <span style="color:#adb5bd;">(세전)</span> {div_krw:,.0f}원 
                 <span style="margin:0 6px; color:#ddd;">|</span> 
                 <span style="color:#0f766e;">{div_krw_net:,.0f}원 <span style="font-size:0.8rem; font-weight:500;">(세후)</span></span>
@@ -1069,15 +1105,15 @@ render_html(f"""
 
         <div class="metric-grid">
             <div class="metric-box">
-                <div class="m-title">📊 분배율(Rate)</div>
+                <div class="m-title">📊 분배율<br>(Rate)</div>
                 <div class="m-data">{rate_disp}</div>
             </div>
             <div class="metric-box">
-                <div class="m-title">🏦 실질수익(SEC)</div>
+                <div class="m-title">🏦 실질수익<br>(SEC)</div>
                 <div class="m-data">{sec_disp}</div>
             </div>
             <div class="metric-box">
-                <div class="m-title">↩️ 원금반환(ROC)</div>
+                <div class="m-title">↩️ 원금반환<br>(ROC)</div>
                 <div class="m-data" style="color: #ef4444 !important;">{d['roc']}%</div>
             </div>
         </div>
