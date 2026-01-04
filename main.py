@@ -415,15 +415,14 @@ render_html("""
     }
     
     .m-title {
-        font-size: 0.65rem;
+        font-size: 0.68rem;
         color: #0f766e !important;
         font-weight: 700;
         margin-bottom: 6px;
-        white-space: normal;
-        word-break: keep-all;
-        text-transform: uppercase;
+        white-space: nowrap;
+        text-transform: none;
         letter-spacing: 0.2px;
-        line-height: 1.25;
+        line-height: 1.3;
     }
     
     .m-data {
@@ -788,18 +787,17 @@ render_html("""
         }
         
         .metric-box {
-            padding: 12px 5px;
+            padding: 13px 6px;
         }
         
         .m-title {
-            font-size: 0.6rem !important;
+            font-size: 0.63rem !important;
             letter-spacing: 0.1px !important;
             margin-bottom: 5px !important;
-            line-height: 1.2 !important;
         }
         
         .m-data {
-            font-size: 0.9rem !important;
+            font-size: 0.92rem !important;
         }
         
         /* 탭 메뉴 - 모바일에서 더 읽기 쉽게 */
@@ -1106,15 +1104,15 @@ render_html(f"""
 
         <div class="metric-grid">
             <div class="metric-box">
-                <div class="m-title">📊<br>분배율<br>(Rate)</div>
+                <div class="m-title">📊 Rate</div>
                 <div class="m-data">{rate_disp}</div>
             </div>
             <div class="metric-box">
-                <div class="m-title">🏦<br>실질수익<br>(SEC)</div>
+                <div class="m-title">🏦 SEC</div>
                 <div class="m-data">{sec_disp}</div>
             </div>
             <div class="metric-box">
-                <div class="m-title">↩️<br>원금반환<br>(ROC)</div>
+                <div class="m-title">↩️ ROC</div>
                 <div class="m-data" style="color: #ef4444 !important;">{d['roc']}%</div>
             </div>
         </div>
